@@ -1,4 +1,4 @@
-# 🧰 VolunHub (Back-End)
+# 🌍 VolunHub (Back-End)
 
 *The server-side API powering VolunHub — a platform connecting volunteers and organizations offering opportunities to make a difference.*
 
