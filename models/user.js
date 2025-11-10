@@ -3,11 +3,26 @@ const mongoose = require('mongoose');
 const userSchema = mongoose.Schema({
   username: {
     type: String,
-    require: true,
+    required: true,
   },
   hashedPassword: {
     type: String,
-    require: true,
+    required: true,
+  },
+  role: {
+    type: String,
+    enum: ['volunteer', 'organization'],
+    required: true,
+  },
+  name: {
+    type: String,
+    required: true,
+  },
+  bio: {
+    type: String
+  },
+  profilePicture: {
+    type: String
   },
 });
 
