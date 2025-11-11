@@ -54,6 +54,11 @@ router.get('/', async (req, res) => {
             filter.date = { $lte: end_date };
         }
 
+        if (req.user.role === 'organization') {
+            // organization should only be able to see their own events
+            filter.owner = req.user._id;
+        }
+        
         const events = await Event.find(filter).populate('owner').sort({ createdAt: -1 });
         res.status(200).json(events);
     } catch (err) {
