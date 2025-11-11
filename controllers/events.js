@@ -6,7 +6,7 @@ const Event = require('../models/event.js');
 router.post('/', async (req, res) => {
     try {
         if (req.user.role !== 'organization') {
-            return res.status(403).json({ err: `Only organizations are allowed to create events` });
+            return res.status(403).json({ err: 'Only organizations are allowed to create events' });
         }
 
         const createdEvent = await Event.create({
