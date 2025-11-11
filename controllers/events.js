@@ -66,4 +66,14 @@ router.get('/', async (req, res) => {
     }
 });
 
+router.get('/:eventId', async (req, res) => {
+    try {
+        const eventId = req.params.eventId;
+        const foundedEvent = await Event.findById(eventId).populate('owner');
+        res.status(200).json(foundedEvent);
+    } catch (err) {
+        res.status(500).json({ err: 'Something went wrong!' });
+    }
+});
+
 module.exports = router;
