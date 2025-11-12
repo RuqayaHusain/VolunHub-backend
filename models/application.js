@@ -10,9 +10,6 @@ const applicationSchema = mongoose.Schema({
         type: Number,
         default: 0,
     },
-    message: {
-        type: String,
-    },
     event: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Event',
