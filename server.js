@@ -15,8 +15,9 @@ const testJwtRouter = require('./controllers/test-jwt');
 const authCtrl = require('./controllers/auth');
 const usersCtrl = require('./controllers/users');
 const eventsCtrl = require('./controllers/events');
+// Routers
 const dashboardRoutes = require('./routes/dashboardRoutes');
-const applicationsCtrl = require('./controllers/applications');
+const applicationRoute = require('./routes/applicationRoutes');
 
 // MiddleWare
 const verifyToken = require('./middleware/verify-token');
@@ -40,7 +41,7 @@ app.use(verifyToken);
 app.use('/users', usersCtrl);
 app.use('/events', eventsCtrl)
 app.use('/dashboard', dashboardRoutes);
-app.use('/applications', applicationsCtrl)
+app.use('/applications', applicationRoute)
 
 app.listen(PORT, () => {
   console.log('The express app is ready!');
