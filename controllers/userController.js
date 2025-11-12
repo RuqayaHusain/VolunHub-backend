@@ -1,48 +1,94 @@
+const User = require('../models/User');
 
-const User = require('../models/user');
+exports.getProfile = async (req, res) => {
+  try {
+    const user = await User.findById(req.user.id).select('-password');
 
-exports.getUserProfile = async (req, res) => {
-    try{
-        const user = await User.findById(req.user.id).select('-password');
-        const { name, email, phone, location, interests, availability, bio } = req.body;
-        if(!user){
-            return res.status(404).json({message: 'User not found.' });
-        }
-        res.json({user});
-    } catch(err){
-        console.error('Get User Profile Error:', err);
-        res.status(500).json({message: 'Server Error. Please try again later.' });
-    }
-    if(user.userType !== 'volunteer'){
-        return res.status(403).json({message: 'Only volunteers can update this profile.' });
-    
-    }
-    if(email !== user.email){
-        const emailExists = await User.findOne({email, _id: { $ne: user._id } });
-        if(emailExists){
-            return res.status(400).json({message: 'Email is already in use by another account.' });
-        }
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: 'User not found'
+      });
     }
 
+    res.json({
+      success: true,
+      data: user
+    });
 
-    const updateUser = await User.findByIdAndUpdate(
-        userId,
-        {
-            name,
-            email,
-            phone,
-            location,
-            interests: Array.isArray(interests)? interests : [],
-            availability,
-            bio
-        },
-        {new: true, runValidators: true}
+  } catch (error) {
+    console.error('Get profile error:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Error fetching profile',
+      error: error.message
+    });
+  }
+};
+
+exports.updateVolunteerProfile = async (req, res) => {
+  try {
+    const { name, email, phone, location, interests, availability, bio } = req.body;
+    const userId = req.user.id;
+
+    const user = await User.findById(userId);
+    if (!user) {
+      return res.status(404).json({
+        success: false,
+        message: 'User not found'
+      });
+    }
+
+    if (user.userType !== 'volunteer') {
+      return res.status(403).json({
+        success: false,
+        message: 'Only volunteers can update this profile'
+      });
+    }
+
+    if (!name || !email) {
+      return res.status(400).json({
+        success: false,
+        message: 'Name and email are required'
+      });
+    }
+
+    if (email !== user.email) {
+      const emailExists = await User.findOne({ email, _id: { $ne: userId } });
+      if (emailExists) {
+        return res.status(400).json({
+          success: false,
+          message: 'Email already in use'
+        });
+      }
+    }
+
+    const updatedUser = await User.findByIdAndUpdate(
+      userId,
+      {
+        name,
+        email,
+        phone,
+        location,
+        interests: Array.isArray(interests) ? interests : [],
+        availability,
+        bio
+      },
+      { new: true, runValidators: true }
     ).select('-password');
 
-    res.json({message: 'Profile updated successfully.', user: updateUser });
+    res.json({
+      success: true,
+      message: 'Profile updated successfully',
+      data: updatedUser
+    });
 
-}catch(err){
-    console.error('Update Volunteer Profile Error:', err);
-    res.status(500).json({message: 'Server Error. Please try again later.' });
-    }
+  } catch (error) {
+    console.error('Update volunteer profile error:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Error updating profile',
+      error: error.message
+    });
+  }
 };
