@@ -33,12 +33,14 @@ app.use(logger('dev'));
 // Public
 app.use('/auth', authCtrl);
 app.use('/test-jwt', testJwtRouter);
+const feedbackRoutes = require('./routes/feedbackRoutes'); 
 
 // Protected Routes
 app.use(verifyToken);
 app.use('/users', usersCtrl);
 app.use('/events', eventsCtrl)
 app.use('/applications', applicationsCtrl)
+app.use('/feedback', feedbackRoutes);
 
 app.listen(PORT, () => {
   console.log('The express app is ready!');
