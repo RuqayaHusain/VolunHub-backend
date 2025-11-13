@@ -1,4 +1,5 @@
 const Application = require("../models/application");
+const Event = require("../models/event");
 
 const getVolunteerApplications = async (req, res) => {
   try {
@@ -10,7 +11,7 @@ const getVolunteerApplications = async (req, res) => {
     res.json({
       success: true,
       count: applications.length,
-      applications,
+      applications, 
     });
   } catch (error) {
     console.error(error);
@@ -29,7 +30,41 @@ const getVolunteerTotalHours = async (req, res) => {
   }
 };
 
+const updateEvent= async (req, res) => {
+  try {
+    const { eventId} = req.params;        
+    const organizationId = req.user._id;   
+
+
+    const event = await Event.findById(eventId);
+    if (!event) {
+      return res.status(404).json({ success: false, message: "Event not found" });
+    }
+
+    if (!event.organization.equals(organizationId)) {
+      return res.status(403).json({ success: false, message: "Youre not allowed to edit this event" });
+    }
+
+    const updatedEvent = await Event.findByIdAndUpdate(eventId, req.body, {
+      new: true});
+
+    res.status(200).json({
+      success: true,
+      message: "Event updated successfully",
+      event: updatedEvent,
+    });
+  } catch (error) {
+    console.error("Error updating event:", error);
+    res.status(500).json({
+      success: false,
+      message: "Something went wrong on the server. Please try again later.",
+    });
+  }
+};
+
+
 module.exports = {
-  getVolunteerApplications ,
-  getVolunteerTotalHours
+  getVolunteerApplications,
+  getVolunteerTotalHours,
+  updateEvent
 };
