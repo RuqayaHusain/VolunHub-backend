@@ -74,8 +74,70 @@ const showEvent = async (req, res) => {
     }
 }
 
+const updateEvent= async (req, res) => {
+  try {
+    const { eventId} = req.params;        
+    const organizationId = req.user._id;   
+
+
+    const event = await Event.findById(eventId);
+    if (!event) {
+      return res.status(404).json({ success: false, message: "Event not found" });
+    }
+
+    if (!event.owner.equals(organizationId)) {
+      return res.status(403).json({ success: false, message: "Youre not allowed to edit this event" });
+    }
+
+    const updatedEvent = await Event.findByIdAndUpdate(eventId, req.body, {
+      new: true});
+
+    res.status(200).json({
+      success: true,
+      message: "Event updated successfully",
+      event: updatedEvent,
+    });
+  } catch (error) {
+    console.error("Error updating event:", error);
+    res.status(500).json({
+      success: false,
+      message: "Something went wrong on the server. Please try again later.",
+    });
+  }
+};
+
+
+const deleteEvent= async (req, res) => {
+  try {
+    const { eventId} = req.params;        
+    const organizationId = req.user._id;   
+
+
+    const event = await Event.findById(eventId);
+    if (!event) {
+      return res.status(404).json({ success: false, message: "Event not found" });
+    }
+
+    if (!event.owner.equals(organizationId)) {
+      return res.status(403).json({ success: false, message: "Youre not allowed to edit this event" });
+    }
+
+
+    await Event.findByIdAndDelete(eventId);
+    res.json({ success: true, message: "Event deleted successfully" });
+  } 
+  
+  catch (error) {
+    console.error(error);
+
+    res.status(500).json({ success: false, message: "Server Error" });
+  }
+};
+
 module.exports = {
     createEvent,
     getEventList,
     showEvent,
+    updateEvent,
+    deleteEvent,
 };
