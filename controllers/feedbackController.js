@@ -96,3 +96,20 @@ exports.getFeedackStats = async (req, res) => {
     }
 
 };
+
+exports.getFeedbackByVolunteer = async (req, res) => {
+    try{
+        const volunteerId = req.user.id;
+        const feedback = await Feedback.find({volunteerId})
+        .populate('organizationId','organizationName email')
+        .sort({createdAt: -1});
+
+        res.json({count: feedback.length, feedback});
+
+    
+    } catch(err){
+        console.error('Get Volunteer Feedback Error:', err);
+        res.status(500).json({message: 'Server fetching volunteer feedback. Please try again later.' });
+
+    }
+};
