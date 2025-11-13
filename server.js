@@ -16,6 +16,7 @@ const authCtrl = require('./controllers/auth');
 const usersCtrl = require('./controllers/users');
 const eventsCtrl = require('./controllers/events');
 const applicationsCtrl = require('./controllers/applications');
+const feedbackRoutes = require('./routes/feedbackRoutes');
 
 // MiddleWare
 const verifyToken = require('./middleware/verify-token');
@@ -33,7 +34,6 @@ app.use(logger('dev'));
 // Public
 app.use('/auth', authCtrl);
 app.use('/test-jwt', testJwtRouter);
-const feedbackRoutes = require('./routes/feedbackRoutes'); 
 
 // Protected Routes
 app.use(verifyToken);
