@@ -16,6 +16,7 @@ const authCtrl = require('./controllers/auth');
 const usersCtrl = require('./controllers/users');
 const eventsCtrl = require('./controllers/events');
 const applicationsCtrl = require('./controllers/applications');
+const reviewRoutes = require('./routes/reviewRoutes');
 
 // MiddleWare
 const verifyToken = require('./middleware/verify-token');
@@ -39,6 +40,7 @@ app.use(verifyToken);
 app.use('/users', usersCtrl);
 app.use('/events', eventsCtrl)
 app.use('/applications', applicationsCtrl)
+app.use('/reviews', reviewRoutes)
 
 app.listen(PORT, () => {
   console.log('The express app is ready!');
