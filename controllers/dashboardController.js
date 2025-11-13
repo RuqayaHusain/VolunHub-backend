@@ -3,7 +3,7 @@ const Event = require("../models/event");
 
 const getVolunteerApplications = async (req, res) => {
   try {
-    const volunteerId = req.user.id;
+    const volunteerId = req.user._id;
     
     const applications = await Application.find({ volunteer: volunteerId })
       .populate("event", "title date location hours")
@@ -85,14 +85,43 @@ const deleteEvent= async (req, res) => {
   
   catch (error) {
     console.error(error);
-    
+
     res.status(500).json({ success: false, message: "Server Error" });
   }
 };
+
+const viewEventApplicants = async (req, res) => {
+  try {
+    const organizationId = req.user._id;
+    const { eventId} = req.params;
+
+    const event = await Event.findById(eventId);
+    if (!event) return res.status(404).json({ success: false, message: "Event not found" });
+    if (!event.organization.equals(organizationId)) {
+      return res.status(403).json({ success: false, message: "You’re not allowed to see applicants for this event" });
+    }
+
+    const applications = await Application.find({ event: eventId })
+      .populate("volunteer", "name email");
+
+    res.status(200).json({
+      success: true,
+      count:applications.length,
+      applicants: applications,
+    });
+
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ success: false, message: "Server error" });
+  }
+};
+
+
 
 module.exports = {
   getVolunteerApplications,
   getVolunteerTotalHours,
   updateEvent,
-  deleteEvent
+  deleteEvent,
+  viewEventApplicants
 };
