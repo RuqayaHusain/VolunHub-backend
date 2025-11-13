@@ -37,5 +37,30 @@ router.get('/:id', async (req, res) => {
   }
 });
 
+router.put('/profile', async (req, res) => {
+  try {
+    const { name } = req.body;
+    // use user's id passed by the payload
+    const user = await User.findById(req.user._id);
+
+    if (!user) {
+      return res.status(404).json({ err: 'User not found' });
+    }
+
+    if(!name) {
+      return res.status(400).json({ err: 'Name is required' });
+    }
+
+    const updatedUser = await User.findByIdAndUpdate(
+      req.user._id,
+      req.body,
+      { new: true }
+    );
+
+    res.json(updatedUser);
+  } catch (err) {
+    res.status(500).json({ err: err.message });
+  }
+});
 
 module.exports = router;
