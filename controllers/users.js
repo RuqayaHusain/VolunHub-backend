@@ -28,10 +28,31 @@ router.get('/current-user', async (req, res) => {
 
 router.get('/:id', async (req, res) => {
   try {
-    // Get a list of all users, but only return their username and _id
+    // get specific user's profile
     const user = await User.findById(req.params.id);
 
     res.json(user);
+  } catch (err) {
+    res.status(500).json({ err: err.message });
+  }
+});
+
+router.put('/profile', async (req, res) => {
+  try {
+    // use user's id passed by the payload
+    const user = await User.findById(req.user._id);
+
+    if (!user) {
+      return res.status(404).json({ err: 'User not found' });
+    }
+
+    const updatedUser = await User.findByIdAndUpdate(
+      req.user._id,
+      req.body,
+      { new: true }
+    );
+
+    res.json(updatedUser);
   } catch (err) {
     res.status(500).json({ err: err.message });
   }
