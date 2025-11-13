@@ -18,6 +18,7 @@ const usersCtrl = require('./controllers/users');
 const dashboardRoutes = require('./routes/dashboardRoutes');
 const applicationRoutes = require('./routes/applicationRoutes');
 const eventRoutes = require('./routes/eventRoutes');
+const reviewRoutes = require('./routes/reviewRoutes');
 
 // MiddleWare
 const verifyToken = require('./middleware/verify-token');
@@ -42,6 +43,7 @@ app.use('/users', usersCtrl);
 app.use('/events', eventRoutes)
 app.use('/dashboard', dashboardRoutes);
 app.use('/applications', applicationRoutes)
+app.use('/reviews', reviewRoutes)
 
 app.listen(PORT, () => {
   console.log('The express app is ready!');
