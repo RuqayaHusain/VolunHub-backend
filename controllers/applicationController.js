@@ -1,9 +1,7 @@
-const express = require('express');
-const router = express.Router();
 const Event = require('../models/event.js');
 const Application = require('../models/application.js');
 
-router.post('/', async (req, res) => {
+const ApplyForEvents = async (req, res) => {
     try {
         const volunteerId = req.user._id;
         const { eventId } = req.body;
@@ -37,6 +35,8 @@ router.post('/', async (req, res) => {
     } catch (err) {
         res.status(500).json({ err: 'Something went wrong!' });
     }
-});
+}
 
-module.exports = router;
+module.exports = {
+    ApplyForEvents,
+};

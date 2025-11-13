@@ -60,3 +60,39 @@ exports.getFeedbackByOrganization = async (req, res) => {
         res.status(500).json({message: 'Server fetching feedback. Please try again later.' });
     }
 };
+exports.getFeedackStats = async (req, res) => {
+    try{
+        const organizationId = req.params.organizationId;
+        const stats = await Feedback.aggregate([
+            {
+             $match: {
+                organizationId: mongoose.SchemaTypes.Number(organizationId)
+            }
+        },
+        {
+            $group: {
+                _id: null,
+                averageRating: { $avg: '$rating' },
+                totalFeedbacks: { $sum: 1 },
+                recommendations: {
+                 $sum: {$cond: ['$wouldRecommend', 1, 0] }
+                }
+            },
+            rating: {$push: '$rating'}
+        }
+    
+       ]);
+       const result = stats[0] || {
+        averageRating: 0,
+        totalFeedback: 0,
+        recommendations: 0
+       };
+    
+       res.json({Date: result});
+
+    }catch(err){
+        console.error('Get Feedback Stats Error:', err);
+        res.status(500).json({message: 'Server fetching feedback stats. Please try again later.' });
+    }
+
+};

@@ -1,14 +1,12 @@
-const express = require('express');
-const router = express.Router();
 const User = require('../models/user.js');
 const Event = require('../models/event.js');
 
-router.post('/', async (req, res) => {
+const createEvent = async (req, res) => {
     try {
         if (req.user.role !== 'organization') {
             return res.status(403).json({ err: 'Only organizations are allowed to create events' });
         }
-
+    
         const createdEvent = await Event.create({
             ...req.body, // copies all the data from the body
             owner: req.user._id,
@@ -17,9 +15,9 @@ router.post('/', async (req, res) => {
     } catch (err) {
         res.status(500).json({ err: 'Something went wrong!' });
     }
-});
+}
 
-router.get('/', async (req, res) => {
+const getEventList = async (req, res) => {
     try {
         const { title, category, location, startDate, endDate } = req.query;
         const filter = {};
@@ -64,9 +62,9 @@ router.get('/', async (req, res) => {
     } catch (err) {
         res.status(500).json({ err: 'Something went wrong!' });
     }
-});
+}
 
-router.get('/:eventId', async (req, res) => {
+const showEvent = async (req, res) => {
     try {
         const eventId = req.params.eventId;
         const foundedEvent = await Event.findById(eventId).populate('owner');
@@ -74,6 +72,10 @@ router.get('/:eventId', async (req, res) => {
     } catch (err) {
         res.status(500).json({ err: 'Something went wrong!' });
     }
-});
+}
 
-module.exports = router;
+module.exports = {
+    createEvent,
+    getEventList,
+    showEvent,
+};
