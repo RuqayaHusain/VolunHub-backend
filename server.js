@@ -14,16 +14,10 @@ const PORT = process.env.PORT || 3000;
 const testJwtRouter = require('./controllers/test-jwt');
 const authCtrl = require('./controllers/auth');
 const usersCtrl = require('./controllers/users');
-<<<<<<< HEAD
-const eventsCtrl = require('./controllers/events');
-const applicationsCtrl = require('./controllers/applications');
-const feedbackRoutes = require('./routes/feedbackRoutes');
-=======
 // Routers
 const dashboardRoutes = require('./routes/dashboardRoutes');
 const applicationRoutes = require('./routes/applicationRoutes');
 const eventRoutes = require('./routes/eventRoutes');
->>>>>>> 566488501ed6ed74ff488b7f40783a5c016c4dc9
 
 // MiddleWare
 const verifyToken = require('./middleware/verify-token');
