@@ -40,6 +40,19 @@ const createReview = async (req, res) => {
     }
 };
 
+const getEventReviews = async (req, res) => {
+    try {
+        const eventId = req.params.eventId;
+
+        const reviews = await Reveiw.find({ event: eventId }).populate('volunteer').sort({ createdAt: -1 });
+
+        res.status(200).json(reviews);
+    } catch (err) {
+        res.status(500).json({ err: 'Something went wrong!' });
+    }
+};
+
 module.exports = {
     createReview,
+    getEventReviews,
 };
