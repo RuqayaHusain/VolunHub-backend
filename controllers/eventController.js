@@ -149,6 +149,15 @@ const ApplyForEvents = async (req, res) => {
             return res.status(404).json({ err: 'Event not found' });
         }
 
+        const currentDate = new Date();
+        if (selectedEvent.date < currentDate) {
+            return res.status(400).json({ err: 'Event already ended' });
+        }
+
+        if (selectedEvent.maxVolunteers === 0) {
+            return res.status(400).json({ err: 'Event is full' });
+        }
+
         const existingApplication = await Application.findOne({ event: eventId, volunteer: volunteerId });
         if (existingApplication) { // checks if user already applied for the selected event
             return res.status(400).json({ err: 'You already applied for this event' });
