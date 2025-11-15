@@ -41,10 +41,12 @@ const eventSchema = mongoose.Schema({
     duration: {
         type: Number,
         default: 0,
+        required: true,
     },
     maxVolunteers: {
         type: Number,
         default: 0,
+        required: true,
     },
     owner: {
         type: mongoose.Schema.Types.ObjectId,
