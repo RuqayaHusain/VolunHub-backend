@@ -42,7 +42,7 @@ app.use(verifyToken);
 app.use('/users', usersCtrl);
 app.use('/events', eventRoutes)
 app.use('/dashboard', dashboardRoutes);
-app.use('/applications', applicationRoutes)
+// app.use('/applications', applicationRoutes)
 app.use('/reviews', reviewRoutes)
 
 app.listen(PORT, () => {
