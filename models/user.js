@@ -1,4 +1,3 @@
-
 const mongoose = require('mongoose');
 
 const userSchema = mongoose.Schema({
@@ -13,9 +12,11 @@ const userSchema = mongoose.Schema({
   role: {
     type: String,
     enum: ['volunteer', 'organization'],
+    required: true,
   },
   name: {
     type: String,
+    required: true,
   },
   bio: {
     type: String
@@ -23,10 +24,6 @@ const userSchema = mongoose.Schema({
   profilePicture: {
     type: String
   },
-   totalHours: {       
-    type: Number,
-    default: 0
-  }
 });
 
 userSchema.set('toJSON', {
@@ -38,6 +35,3 @@ userSchema.set('toJSON', {
 const User = mongoose.model('User', userSchema);
 
 module.exports = User;
-
-
-
