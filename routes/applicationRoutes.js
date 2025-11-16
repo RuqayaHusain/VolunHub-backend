@@ -6,6 +6,6 @@ const verifyToken = require("../middleware/verify-token");
 
 router.post('/', ApplyForEvents);
 
-router.patch("/:applicationId/status", verifyToken, updateApplicationStatus);
+router.put("/:applicationId/status", verifyToken, updateApplicationStatus);
 
 module.exports = router;
