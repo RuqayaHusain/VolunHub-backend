@@ -3,7 +3,7 @@ const Event = require("../models/event");
 
 const getVolunteerApplications = async (req, res) => {
   try {
-    const volunteerId = req.user.id;
+    const volunteerId = req.user._id;
     
     const applications = await Application.find({ volunteer: volunteerId })
       .populate("event", "title date location hours")
