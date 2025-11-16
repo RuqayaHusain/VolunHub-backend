@@ -1,10 +1,8 @@
 const express = require("express");
  const router = express.Router();
- const { ApplyForEvents } = require('../controllers/applicationController');
+ const { updateApplicationStatus } = require('../controllers/applicationController');
 
- router.post('/', ApplyForEvents);
-
- router.put("/:applicationId/status", verifyToken, updateApplicationStatus);
+ router.put("/:applicationId/status", updateApplicationStatus);
 
  
 module.exports = router;
