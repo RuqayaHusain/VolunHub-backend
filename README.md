@@ -17,7 +17,6 @@ This repository contains the **back-end** portion of the HelpHub project.
 
 - **Front-End Repository:** [Frontend Repo Link](https://github.com/RuqayaHusain/VolunHub-frontend)
 - **Planning Docs (Trello / ERD / Wireframes):** [Planning Materials Link](https://trello.com/b/stIO635N/volunhub)
-- **Live API Deployment:** [Backend Deployment Link]
 
 ---
 
