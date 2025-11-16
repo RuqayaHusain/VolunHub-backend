@@ -24,6 +24,10 @@ const userSchema = mongoose.Schema({
   profilePicture: {
     type: String
   },
+  totalHours: {       
+    type: Number,
+    default: 0
+  }
 });
 
 userSchema.set('toJSON', {

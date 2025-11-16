@@ -9,5 +9,7 @@ router.get('/', getEventList);
 router.get('/:eventId', showEvent);
 router.get('/:eventId', showEvent);
 router.post('/:eventId/apply', ApplyForEvents);
-router.delete("/event/:eventId", verifyToken, deleteEvent);
+
+router.put('/:eventId', verifyToken, updateEvent);
+router.delete("/:eventId", verifyToken, deleteEvent);
 module.exports = router;

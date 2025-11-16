@@ -3,7 +3,7 @@ const Event = require("../models/event");
 
 const getVolunteerApplications = async (req, res) => {
   try {
-    const volunteerId = req.user.id;
+    const volunteerId = req.user._id;
     
     const applications = await Application.find({ volunteer: volunteerId })
       .populate("event", "title date location hours")
@@ -57,10 +57,33 @@ const viewEventApplicants = async (req, res) => {
   }
 };
 
+const getOrganizationApplications = async (req, res) => {
+  try {
+    const organizationId = req.user._id;
+
+    const events = await Event.find({ owner: organizationId }).select("_id title");
+
+    const eventIds = events.map(e => e._id);
+
+    const applications = await Application.find({ event: { $in: eventIds } })
+      .populate('event', 'title date location duration') 
+      .populate('volunteer', 'name email totalHours'); 
+
+    res.json({
+      success: true,
+      applications,
+    });
+
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ success: false, message: "Server error" });
+  }
+};
 
 
 module.exports = {
   getVolunteerApplications,
   getVolunteerTotalHours,
-  viewEventApplicants
+  viewEventApplicants, 
+  getOrganizationApplications 
 };
